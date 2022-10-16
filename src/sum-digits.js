@@ -16,7 +16,7 @@ function getSumOfDigits(n) {
 let res = 0;
 res = n.toString().split('').reduce(function(a, b) { return a + parseInt(b); }, 0);
 
-if (res > 10) {
+if (res >= 10) {
   return getSumOfDigits(res);
 }
 return res;
