@@ -33,7 +33,8 @@ prop.forEach((value =>{
 })
 
 let result = new Array(additionRepeatTimes).fill(addition).join(additionSeparator);
-return new Array(repeatTimes).fill(string + result). join(separator);
+return new Array(repeatTimes).fill(string + result).join(separator);
+
 }
 
 module.exports = {
