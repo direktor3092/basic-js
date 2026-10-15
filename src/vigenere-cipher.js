@@ -19,15 +19,52 @@ const { NotImplementedError } = require('../lib');
  * reverseMachine.decrypt('AEIHQX SX DLLU!', 'alphonse') => '!NWAD TA KCATTA'
  *
  */
+
+const A_CODE = 65;
+const ALPHABET_SIZE = 26;
+
 class VigenereCipheringMachine {
-  encrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  constructor(isDirect = true) {
+    this.isDirect = isDirect;
   }
 
-  decrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  process(text, key, mode) {
+    if (text === undefined || key === undefined) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    const message = String(text).toUpperCase();
+    const keyword = String(key).toUpperCase();
+
+    let result = '';
+    let keyPos = 0;
+
+    for (let i = 0; i < message.length; i += 1) {
+      const code = message.charCodeAt(i);
+
+      if (code >= A_CODE && code < A_CODE + ALPHABET_SIZE) {
+        const msgIdx = code - A_CODE;
+        const keyIdx = keyword.charCodeAt(keyPos % keyword.length) - A_CODE;
+
+        const shift = mode === 'encrypt' ? keyIdx : -keyIdx;
+        const newIdx = ((msgIdx + shift) % ALPHABET_SIZE + ALPHABET_SIZE) % ALPHABET_SIZE;
+
+        result += String.fromCharCode(newIdx + A_CODE);
+        keyPos += 1;
+      } else {
+        result += message[i];
+      }
+    }
+
+    return this.isDirect ? result : result.split('').reverse().join('');
+      }
+
+  encrypt(message, key) {
+    return this.process(message, key, 'encrypt');
+  }
+
+  decrypt(encryptedMessage, key) {
+    return this.process(encryptedMessage, key, 'decrypt');
   }
 }
 
